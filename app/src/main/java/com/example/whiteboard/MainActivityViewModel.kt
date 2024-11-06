@@ -8,8 +8,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {
-    private val _data = mutableStateOf<List<ApiResponse>>(emptyList())
-    val data: State<List<ApiResponse>> = _data
+//    private val _data = mutableStateOf<List<ApiResponse>>(emptyList())
+//    val data: State<List<ApiResponse>> = _data
+
+    private val _data = mutableStateOf<List<Photos>>(emptyList())
+    val data: State<List<Photos>> = _data
 
     init {
         fetchData()
@@ -19,8 +22,9 @@ class MainActivityViewModel : ViewModel() {
         Log.e("TAG", "Calling fetchData() ")
         viewModelScope.launch {
             try {
-                val response = RetrofitInstance.api.getData()
+                val response = RetrofitInstance.api.getMarsData().photos
                 Log.e("TAG", "fetchData: $response")
+
                 _data.value = response
             } catch (e: Exception) {
                 // Handle the error

@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
-    private const val BASE_URL = "https://android-kotlin-fun-mars-server.appspot.com"
+    private const val BASE_URL = "https://api.nasa.gov"
 
     val api: ApiService by lazy {
         Retrofit.Builder()
@@ -14,3 +14,4 @@ object RetrofitInstance {
             .create(ApiService::class.java)
     }
 }
+// https://android-kotlin-fun-mars-server.appspot.com other Mars photos api
