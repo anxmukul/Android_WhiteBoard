@@ -46,7 +46,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             WhiteBoardTheme {
                 val snackbarHostState = remember { SnackbarHostState() }
-                Scaffold(modifier = Modifier.fillMaxSize(), snackbarHost = { SnackbarHost(snackbarHostState) }) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    snackbarHost = { SnackbarHost(snackbarHostState) }) { innerPadding ->
 //                    Column (modifier = Modifier.fillMaxSize().background(Color.Yellow), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
 //                        Greeting(
 //                            name = "People",
@@ -59,10 +61,17 @@ class MainActivity : ComponentActivity() {
 //
 //                        }
 //                    }
-                    Column (modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Yellow), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                        Row (modifier = Modifier.weight(0.5f), verticalAlignment = Alignment.CenterVertically) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Yellow),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Row(
+                            modifier = Modifier.weight(0.5f),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Image(
                                 painter = painterResource(R.drawable.my_photo),
                                 contentDescription = null,
@@ -74,33 +83,48 @@ class MainActivity : ComponentActivity() {
                                 contentScale = ContentScale.Crop
                             )
                         }
-                        Row(modifier = Modifier
-                            .fillMaxSize()
-                            .weight(0.5f)
-                            .background(color = Color.Magenta), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                            Column (modifier = Modifier.padding(16.dp).clickable {
-                                startActivity(Intent(this@MainActivity, MainActivity2::class.java))
-                            }){
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(0.5f)
+                                .background(color = Color.Magenta),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Column(modifier = Modifier
+                                .padding(16.dp)
+                                .clickable {
+                                    startActivity(
+                                        Intent(
+                                            this@MainActivity,
+                                            MainActivity2::class.java
+                                        )
+                                    )
+                                }) {
                                 Greeting("Click Me")
                             }
-                            Column (modifier = Modifier.padding(16.dp)){
+                            Column(modifier = Modifier.padding(16.dp)) {
                                 Greeting("Touch Me")
                             }
                         }
-                        Row(modifier = Modifier
-                            .fillMaxSize()
-                            .weight(0.5f)
-                            .background(color = Color.Green)
-                            .clickable {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    snackbarHostState.showSnackbar(message = "Looking Sexy")
-                                }
-                                Log.e(
-                                    "TAG",
-                                    "GreetingPreview: Clicked",
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(0.5f)
+                                .background(color = Color.Green)
+                                .clickable {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        snackbarHostState.showSnackbar(message = "Looking Sexy")
+                                    }
+                                    Log.e(
+                                        "TAG",
+                                        "GreetingPreview: Clicked",
 
-                                    )
-                            }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) { Greeting("Brothers") }
+                                        )
+                                },
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) { Greeting("Brothers") }
 
                     }
                 }
@@ -129,10 +153,14 @@ fun GreetingPreview() {
 ////            Greeting("People")
 ////            Greeting("Ladies")
 //        }
-        Column (modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Yellow), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Row (modifier = Modifier.weight(0.5f), verticalAlignment = Alignment.CenterVertically) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Yellow),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row(modifier = Modifier.weight(0.5f), verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(R.drawable.my_photo),
                     contentDescription = null,
@@ -144,28 +172,36 @@ fun GreetingPreview() {
                     contentScale = ContentScale.Crop
                 )
             }
-            Row(modifier = Modifier
-                .fillMaxSize()
-                .weight(0.5f)
-                .background(color = Color.Magenta), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                Column (modifier = Modifier.padding(16.dp)){
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(0.5f)
+                    .background(color = Color.Magenta),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     Greeting("Click Me")
                 }
-                Column (modifier = Modifier.padding(16.dp)){
+                Column(modifier = Modifier.padding(16.dp)) {
                     Greeting("Touch Me")
                 }
             }
-            Row(modifier = Modifier
-                .fillMaxSize()
-                .weight(0.5f)
-                .background(color = Color.Green)
-                .clickable {
-                    Log.e(
-                        "TAG",
-                        "GreetingPreview: Clicked",
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(0.5f)
+                    .background(color = Color.Green)
+                    .clickable {
+                        Log.e(
+                            "TAG",
+                            "GreetingPreview: Clicked",
 
-                    )
-                }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) { Greeting("Brothers") }
+                            )
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) { Greeting("Brothers") }
 
         }
     }
