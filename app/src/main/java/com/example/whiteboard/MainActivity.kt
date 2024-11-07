@@ -208,7 +208,7 @@ fun GreetingPreview() {
         ) {
             Row(modifier = Modifier.weight(0.5f), verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(R.drawable.my_photo),
+                    painter = painterResource(R.drawable.ic_mars_home),
                     contentDescription = null,
                     modifier = Modifier
                         .size(200.dp)
