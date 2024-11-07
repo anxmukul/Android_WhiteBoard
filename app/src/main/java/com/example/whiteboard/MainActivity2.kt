@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +27,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,7 +70,16 @@ class MainActivity2 : ComponentActivity() {
                             }
                         }
                         items(data) { singleApiResponse ->
-                            Box(modifier = Modifier.fillMaxWidth()) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .border(
+                                        width = 2.dp, brush = Brush.linearGradient(
+                                            listOf(Color(0xFF00BFFF), Color(0xFFFFA07A))
+                                        ), shape = RectangleShape
+                                    )
+                                    .padding(vertical = 2.dp)
+                            ) {
                                 if (isLoading.value) {
                                     CircularProgressIndicator(
                                         modifier = Modifier
@@ -84,7 +96,7 @@ class MainActivity2 : ComponentActivity() {
                                     modifier = Modifier
                                         .height(250.dp)
                                         .fillMaxWidth()
-                                        .padding(vertical = 10.dp, horizontal = 5.dp),
+                                        .padding(vertical = 5.dp, horizontal = 5.dp),
                                     contentScale = ContentScale.Crop,
                                     onSuccess = {
                                         isLoading.value = false
