@@ -16,14 +16,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.whiteboard.ui.theme.WhiteBoardTheme
 
@@ -47,67 +50,80 @@ class MainActivity2 : ComponentActivity() {
             WhiteBoardTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val data by viewModel.data
-                    val isLoading = remember { mutableStateOf(true) }
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        item {
-                            Row {
-                                Surprise(name = "Future Planet, Made in")
-                                AsyncImage(
-                                    model = ImageRequest.Builder(LocalContext.current)
-                                        .data("https://cdn.pixabay.com/photo/2022/06/02/02/24/india-map-7236918_1280.jpg")
-                                        .crossfade(true).build(),
-                                    contentDescription = "Indian Flag",
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .padding(horizontal = 10.dp)
-                                        .size(20.dp)
-                                )
-                            }
-                        }
-                        items(data) { singleApiResponse ->
-                            Box(
+                    if (data.isEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            CircularProgressIndicator(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .border(
-                                        width = 2.dp, brush = Brush.linearGradient(
-                                            listOf(Color(0xFF00BFFF), Color(0xFFFFA07A))
-                                        ), shape = RectangleShape
-                                    )
-                                    .padding(vertical = 2.dp)
-                            ) {
-                                if (isLoading.value) {
-                                    CircularProgressIndicator(
+                                    .padding(16.dp),
+                                color = Color(0xFFE76E1D),
+                                strokeWidth = 2.dp
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            item {
+                                Row {
+                                    Surprise(name = "Future Planet, Made in")
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(LocalContext.current)
+                                            .data("https://cdn.pixabay.com/photo/2022/06/02/02/24/india-map-7236918_1280.jpg")
+                                            .crossfade(true).build(),
+                                        contentDescription = "Indian Flag",
+                                        contentScale = ContentScale.Crop,
                                         modifier = Modifier
-                                            .align(Alignment.Center)
-                                            .padding(16.dp),
-                                        color = Color(0xFF6200EE),
-                                        strokeWidth = 4.dp
+                                            .padding(horizontal = 10.dp)
+                                            .size(20.dp)
+                                    )
+                                }
+                            }
+                            items(data) { singleApiResponse ->
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .border(
+                                            width = 2.dp, brush = Brush.linearGradient(
+                                                listOf(Color(0xFF00BFFF), Color(0xFFFFA07A))
+                                            ), shape = RectangleShape
+                                        )
+                                        .padding(vertical = 2.dp)
+                                ) {
+                                    SubcomposeAsyncImage(
+                                        model = ImageRequest.Builder(LocalContext.current)
+                                            .data(singleApiResponse.imgSrc).crossfade(true).build(),
+                                        contentDescription = "Image from URL",
+                                        modifier = Modifier
+                                            .height(250.dp)
+                                            .fillMaxWidth()
+                                            .padding(vertical = 5.dp, horizontal = 5.dp),
+                                        contentScale = ContentScale.Crop,
+                                        loading = {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier
+                                                    .align(Alignment.Center)
+                                                    .padding(16.dp)
+                                                    .wrapContentSize(),
+                                                color = Color(0xFFE76E1D),
+                                                strokeWidth = 2.dp
+                                            )
+                                        }
                                     )
                                 }
 
-                                AsyncImage(model = ImageRequest.Builder(LocalContext.current)
-                                    .data(singleApiResponse.imgSrc).crossfade(true).build(),
-                                    contentDescription = "Image from URL",
-                                    modifier = Modifier
-                                        .height(250.dp)
-                                        .fillMaxWidth()
-                                        .padding(vertical = 5.dp, horizontal = 5.dp),
-                                    contentScale = ContentScale.Crop,
-                                    onSuccess = {
-                                        isLoading.value = false
-                                    },
-                                    onError = {
-                                        isLoading.value = false
-                                    })
                             }
-
                         }
                     }
+
                 }
 
 

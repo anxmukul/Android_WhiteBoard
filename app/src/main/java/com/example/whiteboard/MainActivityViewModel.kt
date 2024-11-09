@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {
@@ -24,7 +25,6 @@ class MainActivityViewModel : ViewModel() {
             try {
                 val response = RetrofitInstance.api.getMarsData().photos
                 Log.e("TAG", "fetchData: $response")
-
                 _data.value = response
             } catch (e: Exception) {
                 // Handle the error
