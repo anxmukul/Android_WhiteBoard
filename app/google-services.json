@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "258662807147",
+    "project_id": "mars-63dd2",
+    "storage_bucket": "mars-63dd2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258662807147:android:332dc8c2bd14ebd0b7e32e",
+        "android_client_info": {
+          "package_name": "com.example.whiteboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258662807147-62099nbggd5260628cis312b1hf5eqc4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.whiteboard",
+            "certificate_hash": "59b74ea484388eb4c2fe769d6553236aed69f020"
+          }
+        },
+        {
+          "client_id": "258662807147-nvou1dbn1g98j4r6r9tmvvt37pdbunh4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmjU1EKebaj9do8hSzWbbARBx8Bg5DBFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258662807147-nvou1dbn1g98j4r6r9tmvvt37pdbunh4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
