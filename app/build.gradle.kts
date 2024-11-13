@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -55,6 +57,10 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.datastore.core.android)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.lifecycle.runtime.compose.android)
+    ksp(libs.hilt.android.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,4 +79,13 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    // optional - RxJava2 support
+    implementation("androidx.datastore:datastore-preferences-rxjava2:1.1.1")
+    // optional - RxJava3 support
+    implementation("androidx.datastore:datastore-preferences-rxjava3:1.1.1")
+// Alternatively - use the following artifact without an Android dependency.
+    implementation("androidx.datastore:datastore-preferences-core:1.1.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 }

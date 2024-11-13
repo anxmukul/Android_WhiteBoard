@@ -15,9 +15,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -32,17 +29,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.whiteboard.ui.theme.WhiteBoardTheme
 import com.example.whiteboard.ui.theme.customFontFamily
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -143,18 +135,19 @@ class MainActivity : ComponentActivity() {
 //                            verticalAlignment = Alignment.CenterVertically,
 //                            horizontalArrangement = Arrangement.Center
 //                        ) { Greeting("Brothers") }
-                        Row(modifier = Modifier
-                            .fillMaxSize()
-                            .weight(0.3f)
-                            .padding(16.dp)
-                            .clickable {
-                                startActivity(
-                                    Intent(
-                                        this@MainActivity,
-                                        MainActivity2::class.java
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(0.3f)
+                                .padding(16.dp)
+                                .clickable {
+                                    startActivity(
+                                        Intent(
+                                            this@MainActivity,
+                                            MainActivity2::class.java
+                                        )
                                     )
-                                )
-                            },
+                                },
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically
                         ) {

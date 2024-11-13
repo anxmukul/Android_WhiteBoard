@@ -1,59 +1,85 @@
 package com.example.whiteboard
 
-import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.whiteboard.ui.theme.WhiteBoardTheme
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.whiteboard.ui.theme.WhiteBoardTheme
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity3 : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val viewModel = hiltViewModel<MainActivity3ViewModel>()
+            val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
+
             WhiteBoardTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    StartAuthentication(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    )
+                    when (isLoggedIn) {
+                        true -> {
+                            startActivity(
+                                Intent(
+                                    this@MainActivity3,
+                                    MainActivity::class.java
+                                )
+                            )
+                            this.finish()
+                        }
+
+                        false -> {
+                            StartAuthentication(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(innerPadding), onSignInSuccess = {
+                                    viewModel.saveIsSignedIn()
+                                    this.finish()
+                                }
+                            )
+                        }
+
+                        null -> {
+                            StartAuthentication(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(innerPadding), onSignInSuccess = {
+                                    viewModel.saveIsSignedIn()
+                                    this.finish()
+                                }
+                            )
+                        }
+                    }
+
 
                 }
             }
@@ -62,11 +88,9 @@ class MainActivity3 : ComponentActivity() {
 }
 
 @Composable
-fun StartAuthentication(modifier: Modifier = Modifier) {
+fun StartAuthentication(modifier: Modifier = Modifier, onSignInSuccess: () -> Unit) {
     var context = LocalContext.current
-    var isSignedIn by remember { mutableStateOf(false) }
-    if (isSignedIn) {
-        val user = FirebaseAuth.getInstance().currentUser
+    val user = FirebaseAuth.getInstance().currentUser
 //        Column {
 //            user?.let {
 //                Text("Hello, ${it.displayName}")
@@ -78,27 +102,37 @@ fun StartAuthentication(modifier: Modifier = Modifier) {
 //                }
 //            }
 //        }
-        context.startActivity(
-            Intent(
-                context,
-                MainActivity::class.java
-            )
-        )
+//    context.startActivity(
+//        Intent(
+//            context,
+//            MainActivity::class.java
+//        )
+//    )
 
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 100.dp),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            GoogleSignInButton(context) { idToken ->
-                firebaseAuthWithGoogle(idToken) { success ->
-                    isSignedIn = success
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 100.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        GoogleSignInButton(context) { idToken ->
+            firebaseAuthWithGoogle(idToken) { success ->
+                if (success) {
+                    onSignInSuccess()
+                    context.startActivity(
+                        Intent(
+                            context,
+                            MainActivity::class.java
+                        )
+                    )
+
                 }
+
             }
         }
+
     }
 }
 
@@ -139,7 +173,7 @@ fun GoogleSignInButton(context: Context, onSignInSuccess: (String) -> Unit) {
 
 fun getGoogleSignInClient(context: Context): GoogleSignInClient {
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken("") // Use Firebase Web Client ID or your Google API client ID
+        .requestIdToken("258662807147-nvou1dbn1g98j4r6r9tmvvt37pdbunh4.apps.googleusercontent.com") // Use Firebase Web Client ID or your Google API client ID
         .requestEmail()
         .build()
     return GoogleSignIn.getClient(context, gso)
