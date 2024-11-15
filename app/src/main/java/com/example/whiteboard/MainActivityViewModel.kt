@@ -5,11 +5,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainActivityViewModel : ViewModel() {
-//    private val _data = mutableStateOf<List<ApiResponse>>(emptyList())
-//    val data: State<List<ApiResponse>> = _data
+@HiltViewModel
+class MainActivityViewModel @Inject constructor() : ViewModel() {
 
     private val _data = mutableStateOf<List<Photos>>(emptyList())
     val data: State<List<Photos>> = _data
