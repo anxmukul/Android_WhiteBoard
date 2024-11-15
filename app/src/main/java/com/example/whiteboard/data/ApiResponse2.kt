@@ -1,4 +1,4 @@
-package com.example.whiteboard
+package com.example.whiteboard.data
 
 import com.google.gson.annotations.SerializedName
 
