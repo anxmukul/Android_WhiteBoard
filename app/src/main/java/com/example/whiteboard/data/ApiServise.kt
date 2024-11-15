@@ -8,4 +8,7 @@ interface ApiService {
 
     @GET("/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=XRpLP54ghipbAhSPNdT01yHMEfgrNMcZPJnEg206")
     suspend fun getMarsData(): ApiResponse2
+
+    @GET("https://api.le-systeme-solaire.net/rest/bodies/mars")
+    suspend fun getMarsFact(): MarsFact
 }
