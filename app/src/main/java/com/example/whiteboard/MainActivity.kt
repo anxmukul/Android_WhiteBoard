@@ -47,6 +47,7 @@ import com.example.whiteboard.data.MarsFact
 import com.example.whiteboard.data.mockMarsFact
 import com.example.whiteboard.ui.theme.WhiteBoardTheme
 import com.example.whiteboard.ui.theme.customFontFamily
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,10 +57,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+
             WhiteBoardTheme {
                 val snackbarHostState = remember { SnackbarHostState() }
                 var currentRoute by remember { mutableStateOf("home") }
-
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
@@ -89,7 +91,12 @@ class MainActivity : ComponentActivity() {
                                 MarsImage()
                             }
 
-                            "profile" -> {}
+                            "profile" -> {
+                                val user = FirebaseAuth.getInstance().currentUser
+                                if (user != null) {
+                                    UserProfile(user = user)
+                                }
+                            }
                         }
                     }
 
