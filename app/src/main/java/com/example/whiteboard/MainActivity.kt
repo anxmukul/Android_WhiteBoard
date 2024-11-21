@@ -1,5 +1,6 @@
 package com.example.whiteboard
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -94,7 +95,15 @@ class MainActivity : ComponentActivity() {
                             "profile" -> {
                                 val user = FirebaseAuth.getInstance().currentUser
                                 if (user != null) {
-                                    UserProfile(user = user)
+                                    UserProfile(user = user, onLogOut = {
+                                        startActivity(
+                                            Intent(
+                                                this@MainActivity,
+                                                MainActivity3::class.java
+                                            )
+                                        )
+                                        this@MainActivity.finish()
+                                    })
                                 }
                             }
                         }

@@ -21,13 +21,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 @Composable
-fun UserProfile(modifier: Modifier = Modifier, user: FirebaseUser) {
+fun UserProfile(modifier: Modifier = Modifier, user: FirebaseUser, onLogOut: () -> Unit) {
+    val viewModel = hiltViewModel<AccountViewModel>()
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -58,11 +60,15 @@ fun UserProfile(modifier: Modifier = Modifier, user: FirebaseUser) {
             Text(text = "${user.displayName}", fontSize = 18.sp)
             Text(text = "${user.email}")
         }
-        Button(onClick = {
-            FirebaseAuth.getInstance().signOut()
-        }, modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(bottom = 8.dp)) {
+        Button(
+            onClick = {
+                FirebaseAuth.getInstance().signOut()
+                viewModel.saveIsSignedIn()
+                onLogOut()
+            }, modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 8.dp)
+        ) {
             Text("Sign Out")
         }
     }
@@ -74,6 +80,6 @@ fun UserProfile(modifier: Modifier = Modifier, user: FirebaseUser) {
 private fun UserProfilePreview() {
     val user = FirebaseAuth.getInstance().currentUser
     if (user != null) {
-        UserProfile(user = user)
+        UserProfile(user = user, onLogOut = {})
     }
 }
