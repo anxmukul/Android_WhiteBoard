@@ -24,12 +24,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.auth
 
 @Composable
 fun UserProfile(modifier: Modifier = Modifier, user: FirebaseUser, onLogOut: () -> Unit) {
     val viewModel = hiltViewModel<AccountViewModel>()
+    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -62,7 +65,11 @@ fun UserProfile(modifier: Modifier = Modifier, user: FirebaseUser, onLogOut: () 
         }
         Button(
             onClick = {
-                FirebaseAuth.getInstance().signOut()
+                Firebase.auth.signOut()
+                getGoogleSignInClient(context).let {
+                    it.signOut()
+                    it.revokeAccess()
+                }
                 viewModel.saveIsSignedIn()
                 onLogOut()
             }, modifier = Modifier
