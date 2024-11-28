@@ -6,15 +6,19 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController,
     items: List<BottomNavItem>
 ) {
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val currentRoute by navController.currentBackStackEntryFlow.map { entry -> entry.destination.route }
+        .collectAsState(initial = navController.currentBackStackEntry?.destination?.route)
     NavigationBar(containerColor = Color(0xFF321F1A)) {
         items.forEach { item ->
             NavigationBarItem(
