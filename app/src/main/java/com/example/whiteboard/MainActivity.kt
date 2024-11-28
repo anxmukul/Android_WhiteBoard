@@ -28,9 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +43,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.whiteboard.data.MarsFact
 import com.example.whiteboard.data.mockMarsFact
 import com.example.whiteboard.ui.theme.WhiteBoardTheme
@@ -54,6 +55,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -67,7 +69,8 @@ class MainActivity : ComponentActivity() {
 
             WhiteBoardTheme {
                 val snackbarHostState = remember { SnackbarHostState() }
-                var currentRoute by remember { mutableStateOf("home") }
+                val navController = rememberNavController()
+
                 LaunchedEffect(snackBarMessage) {
                     if (snackBarMessage.isNotBlank()) {
                         CoroutineScope(Dispatchers.Main).launch {
@@ -83,10 +86,7 @@ class MainActivity : ComponentActivity() {
                     bottomBar = {
                         BottomNavigationBar(
                             items = bottomNavItems,
-                            currentRoute = currentRoute,
-                            onItemSelected = { selectedItem ->
-                                currentRoute = selectedItem.route
-                            }
+                            navController = navController
                         )
                     }
 
@@ -95,16 +95,18 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        when (currentRoute) {
-                            "home" -> HomeScreen(onShowMarsImages = {
-                                currentRoute = "search"
-                            })
-
-                            "search" -> {
-                                MarsImage()
+                        NavHost(
+                            navController = navController,
+                            startDestination = "home", // Set the initial destination
+                            modifier = Modifier
+                        ) {
+                            composable("home") {
+                                HomeScreen(onShowMarsImages = {
+                                    navController.navigate("search")
+                                })
                             }
-
-                            "profile" -> {
+                            composable("search") { MarsImage() }
+                            composable("profile") {
                                 val user = FirebaseAuth.getInstance().currentUser
                                 if (user != null) {
                                     UserProfile(user = user, onLogOut = {
@@ -124,6 +126,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
+
                     }
 
                 }
