@@ -26,6 +26,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,12 +51,16 @@ import com.example.whiteboard.ui.theme.WhiteBoardTheme
 import com.example.whiteboard.ui.theme.customFontFamily
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val snackBarMessage = this.intent.extras?.getString("show_snackbar_message").orEmpty()
         enableEdgeToEdge()
         setContent {
 
@@ -63,6 +68,13 @@ class MainActivity : ComponentActivity() {
             WhiteBoardTheme {
                 val snackbarHostState = remember { SnackbarHostState() }
                 var currentRoute by remember { mutableStateOf("home") }
+                LaunchedEffect(snackBarMessage) {
+                    if (snackBarMessage.isNotBlank()) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            snackbarHostState.showSnackbar(message = snackBarMessage)
+                        }
+                    }
+                }
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
@@ -100,7 +112,12 @@ class MainActivity : ComponentActivity() {
                                             Intent(
                                                 this@MainActivity,
                                                 MainActivity3::class.java
-                                            )
+                                            ).apply {
+                                                this.putExtra(
+                                                    "show_snackbar_message",
+                                                    "Successfully SignedOut"
+                                                )
+                                            }
                                         )
                                         this@MainActivity.finish()
                                     })

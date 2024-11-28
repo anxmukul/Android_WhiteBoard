@@ -27,10 +27,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,19 +55,33 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity3 : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val snackBarMessage = this.intent.extras?.getString("show_snackbar_message").orEmpty()
         enableEdgeToEdge()
         setContent {
             val viewModel = hiltViewModel<MainActivity3ViewModel>()
             val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
 
             WhiteBoardTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val snackbarHostState = remember { SnackbarHostState() }
+                LaunchedEffect(snackBarMessage) {
+                    if (snackBarMessage.isNotBlank()) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            snackbarHostState.showSnackbar(message = snackBarMessage)
+                        }
+                    }
+                }
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    snackbarHost = { SnackbarHost(snackbarHostState) }) { innerPadding ->
                     when (isLoggedIn) {
                         true -> {
                             startActivity(
@@ -148,7 +165,9 @@ fun StartAuthentication(modifier: Modifier = Modifier, onSignInSuccess: () -> Un
                         Intent(
                             context,
                             MainActivity::class.java
-                        )
+                        ).apply {
+                            this.putExtra("show_snackbar_message", "Successfully SignedIn")
+                        }
                     )
 
                 }
