@@ -10,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -33,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -101,8 +105,8 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                         ) {
                             composable("home") {
-                                HomeScreen(onShowMarsImages = {
-                                    navController.navigate("search")
+                                HomeScreen(onChatBotClick = {
+                                    navController.navigate("chatbot")
                                 })
                             }
                             composable("search") { MarsImage() }
@@ -124,6 +128,14 @@ class MainActivity : ComponentActivity() {
                                         this@MainActivity.finish()
                                     })
                                 }
+                            }
+                            composable("chatbot") {
+                                ChatScreen(
+                                    modifier = Modifier.padding(
+                                        vertical = 10.dp,
+                                        horizontal = 16.dp
+                                    )
+                                )
                             }
                         }
 
@@ -157,79 +169,86 @@ fun Greeting(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun HomeScreen(onShowMarsImages: () -> Unit) {
+fun HomeScreen(onChatBotClick: () -> Unit) {
     val viewModel = hiltViewModel<MainActivity2ViewModel>()
     val data by viewModel.data
     val context = LocalContext.current
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Row(
-            modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_mars_home),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(200.dp)
-                    .clip(
-                        CircleShape
-                    ),
-                contentScale = ContentScale.Crop
-            )
-        }
-        Row(
+    Box() {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+                .fillMaxSize()
+                .background(Color.Black),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
+            Row(
                 modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                MarsText(
-                    text = "Mars is the fourth planet from the Sun in our solar system, often called the \"Red Planet\" due to its reddish appearance, which is caused by iron oxide (rust) on its surface. It has a thin atmosphere, primarily composed of carbon dioxide, and experiences extreme temperature variations, ranging from about -125°C (-195°F) at the poles to 20°C (68°F) at the equator during the summer months.\n" +
-                            "\n" +
-                            "Mars is about half the size of Earth, with a day length of 24.6 hours and a year that lasts 687 Earth days. T",
+                Image(
+                    painter = painterResource(R.drawable.ic_mars_home),
+                    contentDescription = null,
                     modifier = Modifier
+                        .size(200.dp)
+                        .clip(
+                            CircleShape
+                        ),
+                    contentScale = ContentScale.Crop
                 )
             }
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Log.e("TAG", "data: $data")
-            data?.let { it ->
-                MarsFactCard(it)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Column(
+                    modifier = Modifier,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    MarsText(
+                        text = "Mars is the fourth planet from the Sun in our solar system, often called the \"Red Planet\" due to its reddish appearance, which is caused by iron oxide (rust) on its surface. It has a thin atmosphere, primarily composed of carbon dioxide, and experiences extreme temperature variations, ranging from about -125°C (-195°F) at the poles to 20°C (68°F) at the equator during the summer months.\n" +
+                                "\n" +
+                                "Mars is about half the size of Earth, with a day length of 24.6 hours and a year that lasts 687 Earth days. T",
+                        modifier = Modifier
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Log.e("TAG", "data: $data")
+                data?.let { it ->
+                    MarsFactCard(it)
+                }
+
             }
 
         }
-//        Row(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .weight(0.3f)
-//                .padding(16.dp)
-//                .clickable {
-//                    onShowMarsImages()
-//                },
-//            horizontalArrangement = Arrangement.Center,
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Greeting("Show Mars Images")
-//        }
+        FloatingActionButton(
+            onClick = {
+                onChatBotClick()
+            },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp),
+            containerColor = Black,
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.chatbot),
+                contentDescription = "Chat",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(44.dp)
+            )
+        }
     }
+
 }
 
 @Composable
