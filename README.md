@@ -9,13 +9,18 @@ Explore Mars like never before! This Android application provides a seamless way
 - **Dynamic Data Fetching**: Retrieves images and information dynamically via **Retrofit**.
 
 ## Screenshots 📸
-![login_screen.jpg](../../ap/login_screen.jpg)
-![home_screen.jpg](../../ap/home_screen.jpg)
-![chat_screen.jpeg](../../ap/chat_screen.jpeg)
+![login_screen](https://github.com/user-attachments/assets/daca1af0-5d1b-483d-a1ed-ae3deb66843b)
+![home_screen](https://github.com/user-attachments/assets/f7bb5c68-2b2c-45bc-a021-e665dba02476)
+![chat_screen](https://github.com/user-attachments/assets/b43541be-b1a0-413e-872b-c958076298d1)
+
 
 
 ## Video 📸
-[Mars_app.mp4](../../ap/Mars_app.mp4)
+
+
+https://github.com/user-attachments/assets/4d8be60d-cedb-4826-a845-ece763938d96
+
+
 
 
 ## How It Works 🔧
