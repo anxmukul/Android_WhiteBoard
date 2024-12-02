@@ -62,7 +62,7 @@ fun MarsImage(modifier: Modifier = Modifier) {
         ) {
             item {
                 Row {
-                    Surprise(name = "Future Planet, Made in")
+                    Surprise(name = "Images from Mars Rover, Made in")
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data("https://cdn.pixabay.com/photo/2022/06/02/02/24/india-map-7236918_1280.jpg")

@@ -108,7 +108,7 @@ fun ChatScreen(
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                             append("Ai")
                         }
-                        append(" : Know your Mars on finger tip")
+                        append(" : Ask about Mars")
                     },
                     modifier = Modifier.padding(vertical = 4.dp),
                 )
@@ -324,16 +324,16 @@ data class Chat(
 val chat =
     listOf(
         Chat(
-            message = "What do you need help with today ?",
+            message = "How can I help you today ?",
             suggestions =
             listOf(
                 SuggestionCategory(
-                    title = "Direct Questions",
+                    title = "Suggested Questions",
                     suggestions =
                     listOf(
                         Suggestion(query = "Tell me something about Mars."),
                         Suggestion(query = "Why Mars is so popular?"),
-                        Suggestion(query = "How to book Tatkal Ticket to Mars?"),
+                        Suggestion(query = "How to book Ticket to Mars?"),
                     ),
                 )
             ),
